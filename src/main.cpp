@@ -1,39 +1,34 @@
 #include "grade_analyzer.hpp"
 #include <iostream>
+#include <limits>
 
 using namespace std;
 
-int main() {
-    double score1 = 0.0;
-    double score2 = 0.0;
-    double score3 = 0.0;
+// Reads and validates one score to avoid repeating the same input logic.
+double readValidScore(int scoreNumber) {
+    double score = 0.0;
 
+    cout << "Enter score " << scoreNumber << ": ";
+
+    // Also checks for non-numeric input, such as letters.
+    while (!(cin >> score) || !isValidScore(score)) {
+        cout << "Invalid score. Enter a number from 0 to 100: ";
+
+        cin.clear(); // Clears cin's error state.
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Removes invalid input.
+    }
+
+    return score;
+}
+
+int main() {
     cout << "Grade Analyzer" << endl;
     cout << endl;
 
-    cout << "Enter score 1: ";
-    cin >> score1;
-
-    while (!isValidScore(score1)) {
-        cout << "Invalid score. Enter a score from 0 to 100: ";
-        cin >> score1;
-    }
-
-    cout << "Enter score 2: ";
-    cin >> score2;
-
-    while (!isValidScore(score2)) {
-        cout << "Invalid score. Enter a score from 0 to 100: ";
-        cin >> score2;
-    }
-
-    cout << "Enter score 3: ";
-    cin >> score3;
-
-    while (!isValidScore(score3)) {
-        cout << "Invalid score. Enter a score from 0 to 100: ";
-        cin >> score3;
-    }
+    // Use the helper function to reduce repeated input and validation code.
+    double score1 = readValidScore(1);
+    double score2 = readValidScore(2);
+    double score3 = readValidScore(3);
 
     double total = calculateTotal(score1, score2, score3);
     double average = calculateAverage(total, SCORE_COUNT);
